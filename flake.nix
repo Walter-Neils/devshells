@@ -19,6 +19,7 @@
         devShells = {
           rust-ebpf = import ./rust/ebpf.nix { inherit pkgs; };
           nodejs-standard = import ./nodejs/standard.nix { inherit pkgs; };
+          cpp-standard = import ./cpp/standard.nix { inherit pkgs; };
         };
       }
     );
