@@ -1,11 +1,7 @@
-{pkgs}:
-pkgs.mkShell {
-    buildInputs = with pkgs; [
-        nodejs
-    ];
-
-    shellHook = ''
-    echo "nodejs: $(node --version)"
-    echo "npm:    $(npm --version)"
-    '';
+{ pkgs, ... }: {
+  packages = with pkgs; [
+    nodejs_20
+    nodePackages.pnpm
+    nodePackages.typescript-language-server
+  ];
 }

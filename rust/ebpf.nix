@@ -1,11 +1,10 @@
-{ pkgs }:
+{ pkgs, ... }:
 
 let
   rustToolchain = pkgs.rust-bin.selectLatestNightlyWith (toolchain:
     toolchain.default.override {
       extensions = [ "rust-src" "rust-analyzer" ];
-      # Dynamic target selection based on what system is being evaluated
-      targets = [ "${pkgs.stdenv.hostPlatform.config}" ]; 
+      targets = [ "${pkgs.stdenv.hostPlatform.config}" ];
     }
   );
 
@@ -22,29 +21,23 @@ let
     };
   };
 in
-pkgs.mkShell {
-  name = "rust-ebpf-nightly";
-
-  buildInputs = with pkgs; [
+{
+  # In devshell, packages replaces buildInputs
+  packages = [
     rustToolchain
     bpf-linker
-
-    llvmPackages_22.llvm
-    llvmPackages_22.clang
-    libelf
-    zlib
-
-    cargo-generate
-    iproute2
-    pkg-config
+    pkgs.llvmPackages_22.llvm
+    pkgs.llvmPackages_22.clang
+    pkgs.libelf
+    pkgs.zlib
+    pkgs.cargo-generate
+    pkgs.iproute2
+    pkgs.pkg-config
   ];
 
-  shellHook = ''
-    export LIBELF_FLAGS="-lelf"
-    export RUST_LOG=debug
-    echo "env: RUST_LOG=$RUST_LOG"
-    echo "env: LIBELF_FLAGS=$LIBELF_FLAGS"
-    echo "version: cargo: $(cargo -V)"
-
-  '';
+  # In devshell, env handles exports elegantly
+  env = [
+    { name = "LIBELF_FLAGS"; value = "-lelf"; }
+    { name = "RUST_LOG"; value = "debug"; }
+  ];
 }

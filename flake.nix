@@ -4,22 +4,35 @@
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
     flake-utils.url = "github:numtide/flake-utils";
+    devshell.url = "github:numtide/devshell"; # 1. Added devshell input
     rust-overlay = {
       url = "github:oxalica/rust-overlay";
       inputs.nixpkgs.follows = "nixpkgs";
     };
   };
 
-  outputs = { self, nixpkgs, flake-utils, rust-overlay, ... }:
+  outputs = { self, nixpkgs, flake-utils, devshell, rust-overlay, ... }:
     flake-utils.lib.eachDefaultSystem (system:
       let
-        overlays = [ (import rust-overlay) ];
+        # 2. Included devshell overlay alongside rust-overlay
+        overlays = [ (import rust-overlay) devshell.overlays.default ];
         pkgs = import nixpkgs { inherit system overlays; };
       in {
         devShells = {
-          rust-ebpf = import ./rust/ebpf.nix { inherit pkgs; };
-          nodejs-standard = import ./nodejs/standard.nix { inherit pkgs; };
-          cpp-standard = import ./cpp/standard.nix { inherit pkgs; };
+          # Individual standalone shells (now defined as modules)
+          rust-ebpf = pkgs.devshell.mkShell { imports = [ ./rust/ebpf.nix ]; };
+          nodejs-standard = pkgs.devshell.mkShell { imports = [ ./nodejs/standard.nix ]; };
+          cpp-standard = pkgs.devshell.mkShell { imports = [ ./cpp/standard.nix ]; };
+
+          # 3. The Super Shell: Combines all of them into one!
+          everything = pkgs.devshell.mkShell {
+            name = "master-hub-shell";
+            imports = [
+              ./rust/ebpf.nix
+              ./nodejs/standard.nix
+              ./cpp/standard.nix
+            ];
+          };
         };
       }
     );
