@@ -21,15 +21,6 @@
           rust-ebpf = pkgs.devshell.mkShell { imports = [ ./rust/ebpf.nix ]; };
           nodejs-standard = pkgs.devshell.mkShell { imports = [ ./nodejs/standard.nix ]; };
           cpp-standard = pkgs.devshell.mkShell { imports = [ ./cpp/standard.nix ]; };
-
-          everything = pkgs.devshell.mkShell {
-            name = "master-hub-shell";
-            imports = [
-              ./rust/ebpf.nix
-              ./nodejs/standard.nix
-              ./cpp/standard.nix
-            ];
-          };
         };
       }
     );
