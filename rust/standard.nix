@@ -11,6 +11,7 @@ in
 {
   packages = [
     rustToolchain
+    pkgs.stdenv.cc
     pkgs.cargo-generate
     pkgs.pkg-config
   ];
