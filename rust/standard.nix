@@ -1,9 +1,13 @@
 { pkgs, ... }:
 
 let
-  rustToolchain = pkgs.rust-bin.selectLatestNightlyWith (toolchain:
+  rustToolchain = pkgs.rust-bin.selectLatestNightlyWith (
+    toolchain:
     toolchain.default.override {
-      extensions = [ "rust-src" "rust-analyzer" ];
+      extensions = [
+        "rust-src"
+        "rust-analyzer"
+      ];
       targets = [ "${pkgs.stdenv.hostPlatform.config}" ];
     }
   );
@@ -17,6 +21,9 @@ in
   ];
 
   env = [
-    { name = "RUST_LOG"; value = "debug"; }
+    {
+      name = "RUST_LOG";
+      value = "debug";
+    }
   ];
 }

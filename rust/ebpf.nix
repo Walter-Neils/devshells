@@ -1,9 +1,13 @@
 { pkgs, ... }:
 
 let
-  rustToolchain = pkgs.rust-bin.selectLatestNightlyWith (toolchain:
+  rustToolchain = pkgs.rust-bin.selectLatestNightlyWith (
+    toolchain:
     toolchain.default.override {
-      extensions = [ "rust-src" "rust-analyzer" ];
+      extensions = [
+        "rust-src"
+        "rust-analyzer"
+      ];
       targets = [ "${pkgs.stdenv.hostPlatform.config}" ];
     }
   );
@@ -37,7 +41,13 @@ in
 
   # In devshell, env handles exports elegantly
   env = [
-    { name = "LIBELF_FLAGS"; value = "-lelf"; }
-    { name = "RUST_LOG"; value = "debug"; }
+    {
+      name = "LIBELF_FLAGS";
+      value = "-lelf";
+    }
+    {
+      name = "RUST_LOG";
+      value = "debug";
+    }
   ];
 }

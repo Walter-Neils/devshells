@@ -10,6 +10,9 @@
   ];
 
   env = [
-    { name = "CXXFLAGS"; value = "-Wall -Wextra -O2 -std=c++20"; }
+    {
+      name = "CXXFLAGS";
+      value = "-Wall -Wextra -O2 -std=c++20";
+    }
   ];
 }
