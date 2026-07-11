@@ -19,6 +19,7 @@
       in {
         devShells = {
           rust-ebpf = pkgs.devshell.mkShell { imports = [ ./rust/ebpf.nix ]; };
+          rust-standard = pkgs.devshell.mkShell { imports = [ ./rust/standard.nix ]; };
           nodejs-standard = pkgs.devshell.mkShell { imports = [ ./nodejs/standard.nix ]; };
           cpp-standard = pkgs.devshell.mkShell { imports = [ ./cpp/standard.nix ]; };
         };
